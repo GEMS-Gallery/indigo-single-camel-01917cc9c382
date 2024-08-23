@@ -25,19 +25,19 @@ actor TexasHoldem {
     folded : Bool;
   };
   type GameState = {
-    players : [PlayerId];
+    players : [Text];
     communityCards : [?Card];
-    currentPlayer : ?PlayerId;
+    currentPlayer : ?Text;
     pot : Nat;
     stage : Text;
   };
 
   // Stable variables
   stable var gameState : ?GameState = null;
-  stable var playersEntries : [(PlayerId, PlayerState)] = [];
+  stable var playersEntries : [(Text, PlayerState)] = [];
 
   // Mutable variables
-  var players = HashMap.HashMap<PlayerId, PlayerState>(0, Principal.equal, Principal.hash);
+  var players = HashMap.HashMap<Text, PlayerState>(0, Text.equal, Text.hash);
   var deck : List.List<Card> = List.nil();
   var currentBet : Nat = 0;
 
@@ -47,7 +47,7 @@ actor TexasHoldem {
   };
 
   system func postupgrade() {
-    players := HashMap.fromIter<PlayerId, PlayerState>(playersEntries.vals(), 0, Principal.equal, Principal.hash);
+    players := HashMap.fromIter<Text, PlayerState>(playersEntries.vals(), 0, Text.equal, Text.hash);
     playersEntries := [];
   };
 
@@ -93,7 +93,7 @@ actor TexasHoldem {
 
   // Public functions
   public shared(msg) func joinGame() : async Text {
-    let playerId = msg.caller;
+    let playerId = Principal.toText(msg.caller);
     switch (players.get(playerId)) {
       case null {
         players.put(playerId, {
@@ -109,7 +109,7 @@ actor TexasHoldem {
   };
 
   public shared(msg) func placeBet(amount : Nat) : async Text {
-    let playerId = msg.caller;
+    let playerId = Principal.toText(msg.caller);
     switch (players.get(playerId)) {
       case null { "You are not in the game." };
       case (?playerState) {
@@ -131,7 +131,7 @@ actor TexasHoldem {
   };
 
   public shared(msg) func fold() : async Text {
-    let playerId = msg.caller;
+    let playerId = Principal.toText(msg.caller);
     switch (players.get(playerId)) {
       case null { "You are not in the game." };
       case (?playerState) {
@@ -153,19 +153,19 @@ actor TexasHoldem {
   };
 
   public query(msg) func getPlayerState() : async ?PlayerState {
-    players.get(msg.caller)
+    players.get(Principal.toText(msg.caller))
   };
 
   // Chat functionality
-  stable var chatMessages = List.nil<(PlayerId, Text, Time.Time)>();
+  stable var chatMessages = List.nil<(Text, Text, Time.Time)>();
 
   public shared(msg) func sendChatMessage(message : Text) : async () {
-    let playerId = msg.caller;
+    let playerId = Principal.toText(msg.caller);
     let timestamp = Time.now();
     chatMessages := List.push((playerId, message, timestamp), chatMessages);
   };
 
-  public query func getChatMessages() : async [(PlayerId, Text, Time.Time)] {
+  public query func getChatMessages() : async [(Text, Text, Time.Time)] {
     List.toArray(chatMessages)
   };
 }

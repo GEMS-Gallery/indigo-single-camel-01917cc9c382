@@ -1,13 +1,12 @@
 export const idlFactory = ({ IDL }) => {
-  const PlayerId = IDL.Principal;
   const Time = IDL.Int;
   const Card = IDL.Record({ 'value' : IDL.Nat, 'suit' : IDL.Text });
   const GameState = IDL.Record({
     'pot' : IDL.Nat,
-    'currentPlayer' : IDL.Opt(PlayerId),
+    'currentPlayer' : IDL.Opt(IDL.Text),
     'communityCards' : IDL.Vec(IDL.Opt(Card)),
     'stage' : IDL.Text,
-    'players' : IDL.Vec(PlayerId),
+    'players' : IDL.Vec(IDL.Text),
   });
   const PlayerState = IDL.Record({
     'bet' : IDL.Nat,
@@ -19,7 +18,7 @@ export const idlFactory = ({ IDL }) => {
     'fold' : IDL.Func([], [IDL.Text], []),
     'getChatMessages' : IDL.Func(
         [],
-        [IDL.Vec(IDL.Tuple(PlayerId, IDL.Text, Time))],
+        [IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text, Time))],
         ['query'],
       ),
     'getGameState' : IDL.Func([], [IDL.Opt(GameState)], ['query']),

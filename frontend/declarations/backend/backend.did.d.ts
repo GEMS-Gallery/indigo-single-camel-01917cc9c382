@@ -5,12 +5,11 @@ import type { IDL } from '@dfinity/candid';
 export interface Card { 'value' : bigint, 'suit' : string }
 export interface GameState {
   'pot' : bigint,
-  'currentPlayer' : [] | [PlayerId],
+  'currentPlayer' : [] | [string],
   'communityCards' : Array<[] | [Card]>,
   'stage' : string,
-  'players' : Array<PlayerId>,
+  'players' : Array<string>,
 }
-export type PlayerId = Principal;
 export interface PlayerState {
   'bet' : bigint,
   'hand' : Array<[] | [Card]>,
@@ -20,7 +19,7 @@ export interface PlayerState {
 export type Time = bigint;
 export interface _SERVICE {
   'fold' : ActorMethod<[], string>,
-  'getChatMessages' : ActorMethod<[], Array<[PlayerId, string, Time]>>,
+  'getChatMessages' : ActorMethod<[], Array<[string, string, Time]>>,
   'getGameState' : ActorMethod<[], [] | [GameState]>,
   'getPlayerState' : ActorMethod<[], [] | [PlayerState]>,
   'joinGame' : ActorMethod<[], string>,

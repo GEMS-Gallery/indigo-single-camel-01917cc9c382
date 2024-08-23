@@ -6,12 +6,11 @@ type PlayerState =
    folded: bool;
    hand: vec opt Card;
  };
-type PlayerId = principal;
 type GameState = 
  record {
    communityCards: vec opt Card;
-   currentPlayer: opt PlayerId;
-   players: vec PlayerId;
+   currentPlayer: opt text;
+   players: vec text;
    pot: nat;
    stage: text;
  };
@@ -23,7 +22,7 @@ type Card =
 service : {
   fold: () -> (text);
   getChatMessages: () -> (vec record {
-                                PlayerId;
+                                text;
                                 text;
                                 Time;
                               }) query;
