@@ -1,0 +1,35 @@
+type Time = int;
+type PlayerState = 
+ record {
+   bet: nat;
+   chips: nat;
+   folded: bool;
+   hand: vec opt Card;
+ };
+type PlayerId = principal;
+type GameState = 
+ record {
+   communityCards: vec opt Card;
+   currentPlayer: opt PlayerId;
+   players: vec PlayerId;
+   pot: nat;
+   stage: text;
+ };
+type Card = 
+ record {
+   suit: text;
+   value: nat;
+ };
+service : {
+  fold: () -> (text);
+  getChatMessages: () -> (vec record {
+                                PlayerId;
+                                text;
+                                Time;
+                              }) query;
+  getGameState: () -> (opt GameState) query;
+  getPlayerState: (PlayerId) -> (opt PlayerState) query;
+  joinGame: () -> (text);
+  placeBet: (nat) -> (text);
+  sendChatMessage: (text) -> ();
+}
