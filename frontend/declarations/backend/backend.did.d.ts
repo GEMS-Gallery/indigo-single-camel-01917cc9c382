@@ -22,7 +22,7 @@ export interface _SERVICE {
   'fold' : ActorMethod<[], string>,
   'getChatMessages' : ActorMethod<[], Array<[PlayerId, string, Time]>>,
   'getGameState' : ActorMethod<[], [] | [GameState]>,
-  'getPlayerState' : ActorMethod<[PlayerId], [] | [PlayerState]>,
+  'getPlayerState' : ActorMethod<[], [] | [PlayerState]>,
   'joinGame' : ActorMethod<[], string>,
   'placeBet' : ActorMethod<[bigint], string>,
   'sendChatMessage' : ActorMethod<[string], undefined>,

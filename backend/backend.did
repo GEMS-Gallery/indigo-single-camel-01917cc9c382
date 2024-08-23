@@ -28,7 +28,7 @@ service : {
                                 Time;
                               }) query;
   getGameState: () -> (opt GameState) query;
-  getPlayerState: (PlayerId) -> (opt PlayerState) query;
+  getPlayerState: () -> (opt PlayerState) query;
   joinGame: () -> (text);
   placeBet: (nat) -> (text);
   sendChatMessage: (text) -> ();

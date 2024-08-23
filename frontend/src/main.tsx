@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import './index.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { AuthProvider } from './AuthContext';
 
 const theme = createTheme({
   palette: {
@@ -21,7 +22,9 @@ const theme = createTheme({
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')

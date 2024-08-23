@@ -152,8 +152,8 @@ actor TexasHoldem {
     gameState
   };
 
-  public query func getPlayerState(playerId : PlayerId) : async ?PlayerState {
-    players.get(playerId)
+  public query(msg) func getPlayerState() : async ?PlayerState {
+    players.get(msg.caller)
   };
 
   // Chat functionality

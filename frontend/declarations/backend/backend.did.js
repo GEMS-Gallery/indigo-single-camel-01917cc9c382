@@ -23,7 +23,7 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'getGameState' : IDL.Func([], [IDL.Opt(GameState)], ['query']),
-    'getPlayerState' : IDL.Func([PlayerId], [IDL.Opt(PlayerState)], ['query']),
+    'getPlayerState' : IDL.Func([], [IDL.Opt(PlayerState)], ['query']),
     'joinGame' : IDL.Func([], [IDL.Text], []),
     'placeBet' : IDL.Func([IDL.Nat], [IDL.Text], []),
     'sendChatMessage' : IDL.Func([IDL.Text], [], []),

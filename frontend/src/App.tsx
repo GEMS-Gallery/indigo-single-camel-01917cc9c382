@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { backend } from 'declarations/backend';
 import { Container, Typography, Button, TextField, CircularProgress } from '@mui/material';
 import { styled } from '@mui/system';
+import { useAuth } from './AuthContext';
 
 const PokerTable = styled('div')(({ theme }) => ({
   width: '80%',
@@ -49,6 +50,7 @@ const Card = styled('div')(({ theme }) => ({
 }));
 
 const App: React.FC = () => {
+  const { isAuthenticated, login, logout } = useAuth();
   const [gameState, setGameState] = useState<any>(null);
   const [playerState, setPlayerState] = useState<any>(null);
   const [loading, setLoading] = useState(false);
@@ -57,10 +59,12 @@ const App: React.FC = () => {
   const [chatMessages, setChatMessages] = useState<any[]>([]);
 
   useEffect(() => {
-    fetchGameState();
-    fetchPlayerState();
-    fetchChatMessages();
-  }, []);
+    if (isAuthenticated) {
+      fetchGameState();
+      fetchPlayerState();
+      fetchChatMessages();
+    }
+  }, [isAuthenticated]);
 
   const fetchGameState = async () => {
     const state = await backend.getGameState();
@@ -68,8 +72,7 @@ const App: React.FC = () => {
   };
 
   const fetchPlayerState = async () => {
-    // Note: In a real application, you would get the player's principal ID here
-    const state = await backend.getPlayerState('EXAMPLE_PLAYER_ID');
+    const state = await backend.getPlayerState();
     setPlayerState(state);
   };
 
@@ -125,6 +128,19 @@ const App: React.FC = () => {
       }
     }
   };
+
+  if (!isAuthenticated) {
+    return (
+      <Container>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Texas Hold'em Poker
+        </Typography>
+        <Button variant="contained" onClick={login}>
+          Login with Internet Identity
+        </Button>
+      </Container>
+    );
+  }
 
   return (
     <Container>
@@ -197,6 +213,10 @@ const App: React.FC = () => {
           Send
         </Button>
       </div>
+
+      <Button variant="contained" onClick={logout} style={{ marginTop: '20px' }}>
+        Logout
+      </Button>
     </Container>
   );
 };
